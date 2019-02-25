@@ -1,4 +1,29 @@
 {
   "name": "md-links",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "description": "## Preámbulo",
+  "main": "index.js",
+  "bin": {
+    "md-links": "./index.js"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AliceInWonderDev/SCL007-md-links.git"
+  },
+  "author": "Alicia Castañeda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AliceInWonderDev/SCL007-md-links/issues"
+  },
+  "homepage": "https://github.com/AliceInWonderDev/SCL007-md-links#readme",
+  "dependencies": {
+    "markdown-link-extractor": "^1.2.0",
+    "node-fetch": "^2.3.0"
+  }
 }

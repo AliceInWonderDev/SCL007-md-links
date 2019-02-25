@@ -3,8 +3,13 @@ const mdLinks = require('../');
 
 describe('mdLinks', () => {
 
-  it('should...', () => {
+  it('Debería ser una función', () => {
+    console.log('FIX ME!');
+  });
+  it('Debería leer archivos que son .md', () => {
     console.log('FIX ME!');
   });
 
+
 });
+
