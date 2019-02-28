@@ -3,46 +3,63 @@ let fs = require('fs');
 let fetch = require('node-fetch');
 let path = require('path');
 let anyDocument = process.argv[2];
+let ruta = path.resolve(anyDocument);
 let markdownLinkExtractor = require('markdown-link-extractor');
-readline = require('readline');
-let pathRuta = "";
 
-let mdLinks = (pathRuta) =>{
-    pathRuta = path.resolve(anyDocument);
-    let markdown = fs.readFile(pathRuta).toString();
-    let link = markdownLinkExtractor(markdown);
-    let arregloLinks = [];
+let mdLinks = (ruta) =>{
+    let markdown = fs.readFileSync(ruta).toString();
+    let links = markdownLinkExtractor(markdown);
+    let arrayFetch = [];
     //recorrer lineas
-    for(let i=0; i < link.length; i++){
-        const url= link[i];
-
+    for(let i=0; i < links.length; i++){
+        const text = links[i].text;
+        const url= links[i];
     //mostrar cuales estan rotos
-    let arregloFetch = fetch(link[i])
-        .then((res)=>{
+    let linkFetch = fetch(links[i])
+        .then(res=>{
+        if(process.argv[3] === '--validate'){
             let infoLinks = {
-                url:`${res.url}`,
-                status:`${res.status}`,
-                text: `${res.text}`
+                links:res.url,
+                texto: text,
+                ruta: ruta,
+                status:res.status,
+                statusText: res.statusText  
+            };
+            return infoLinks;
+        }else{
+            let infoLinks = {
+                links:res.url,
+                texto: text,
+                ruta: ruta
             }
             return infoLinks;
+        }
+            
         })
-        .catch((err)=>{
-            let falla = {
-                urlLink: `${url}`,
+        .catch(error =>{
+            let fail = {
+                urlLink: url,
                 satusLink:"error",
             }
+            return fail;   
         })
-        result.push(arregloFetch);
+        arrayFetch.push(linkFetch);
     }
-    Promise.all(arregloLinks)
-        .then((lineaLinks)=>{
-            console.log(lineaLinks)
+    Promise.all(arrayFetch)
+        .then(res=>{
+            console.log(res)
         })
         .catch(console.error)
-};
-mdLinks();
-//-------------------------------------------------------
 
+};
+mdLinks(ruta);
+
+
+//-------------------------------------------------------------------------------------------------
+
+
+
+//-------------------------------------------------------
 // let markdown = fs.readFileSync(anyDocument).toString();
 // let link = markdownLinkExtractor(markdown);
 // link.forEach(function (link) {
@@ -50,20 +67,12 @@ mdLinks();
 // });
 
 // for(let i=0; i < link.length; i++){
-//     if(link === true){
-    
+//     if(link === true){   
 //     }
-
 // }
 
 
 //-------------------------------------------------------
-
-
-
-
-
-
 // let mdLinks = {}
 
 // mdLinks.readDirectory = (anyDocument) => {
