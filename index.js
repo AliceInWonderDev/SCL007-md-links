@@ -1,63 +1,49 @@
 #!/usr/bin/env node
-let fs = require('fs');
-let fetch = require('node-fetch');
-let path = require('path');
+
+const mdLinks = require('./modulo.js');
 let anyDocument = process.argv[2];
-let ruta = path.resolve(anyDocument);
-let markdownLinkExtractor = require('markdown-link-extractor');
+const options= process.argv[3];
 
-let mdLinks = (ruta) =>{
-    let markdown = fs.readFileSync(ruta).toString();
-    let links = markdownLinkExtractor(markdown);
-    let arrayFetch = [];
-    //recorrer lineas
-    for(let i=0; i < links.length; i++){
-        const text = links[i].text;
-        const url= links[i];
-    //mostrar cuales estan rotos
-    let linkFetch = fetch(links[i])
-        .then(res=>{
-        if(process.argv[3] === '--validate'){
-            let infoLinks = {
-                links:res.url,
-                texto: text,
-                ruta: ruta,
-                status:res.status,
-                statusText: res.statusText  
-            };
-            return infoLinks;
-        }else{
-            let infoLinks = {
-                links:res.url,
-                texto: text,
-                ruta: ruta
-            }
-            return infoLinks;
-        }
-            
-        })
-        .catch(error =>{
-            let fail = {
-                urlLink: url,
-                satusLink:"error",
-            }
-            return fail;   
-        })
-        arrayFetch.push(linkFetch);
-    }
-    Promise.all(arrayFetch)
-        .then(res=>{
-            console.log(res)
-        })
-        .catch(console.error)
-
-};
-mdLinks(ruta);
+if(require.map===module)
+mdLinks(ruta, opcion);
 
 
-//-------------------------------------------------------------------------------------------------
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// fs.readdir(anyDocument, function(error, list){
+//             if(error){
+//                 console.log(error);
+//             }
+//             list.forEach(function(files){
+//                 if(fs.lstatSync(files).isDirectory()){
+//                     return mdLinks.readDirectory(files);
+//                 }
+//                 if(fs.lstatSync(files).isFile()){
+//                     return mdLinks.readFile(files);
+//                 }
+//                 console.log(files);
+//             })
+//         })
 
 //-------------------------------------------------------
 // let markdown = fs.readFileSync(anyDocument).toString();
@@ -130,15 +116,10 @@ mdLinks(ruta);
 // var ext = path.extname('README.md');
 // console.log(ext);
 
-// const fs = require('fs');
-// const path = require('path');
-// readFile = require('readFile');
-
 // fs.readFile('./README.md', (err, data) => {
 //   if (err) throw err;
 //   console.log(data);
 // });
-
 
 // if (dirEntry.isDirectory === true){
 // // See the section on FileEntry for other inherited properties/methods.
